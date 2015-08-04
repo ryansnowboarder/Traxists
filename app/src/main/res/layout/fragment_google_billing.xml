@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_google_billing"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@color/background_blue">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginSize_medium"
+        android:layout_marginBottom="10dp"
+        android:text="@string/payment"
+        android:textStyle="bold"
+        android:textSize="@dimen/fontSize_large"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/marginSize_medium"
+        android:layout_marginLeft="@dimen/marginSize_medium"
+        android:layout_marginRight="@dimen/marginSize_medium"
+        android:text="PayPal API or other payment API HERE"
+        android:textSize="45dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@color/black"/>
+
+</LinearLayout>
