@@ -11,6 +11,10 @@ import android.widget.Toast;
 
 /**
  * Created by Ryan Fletcher on 8/3/2015.
+ *
+ * This fragment is utilized for confirming the entered password that the user is submitting for
+ * usage in his or her new account.
+ *
  */
 public class ConfirmPasswordFragment extends Fragment {
 
@@ -23,11 +27,15 @@ public class ConfirmPasswordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_confirm_password, container, false);
 
+        // connect the EditText XML components to the variables in this Java logic
         confirm_password_edittext = (EditText) v.findViewById(R.id.confirm_password_edittext);
 
+        // connect the Button XML components to the variables in this Java logic
         confirm_password_prev_button = (Button) v.findViewById(R.id.confirm_password_prev);
         confirm_password_next_button = (Button) v.findViewById(R.id.confirm_password_next);
 
+        // set an onOnClickListener to confirm_password_prev_button that brings the user-client
+        // back to EnterUsernameAndPassword fragment
         confirm_password_prev_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +43,9 @@ public class ConfirmPasswordFragment extends Fragment {
             }
         });
 
+        // Set an onOnClickListener to confirm_password_next_button that brings the user-client
+        // forward to RecoveryFragment fragment and saves the password to the User object in
+        // the MainActivity. Also checks for password mismatches.
         confirm_password_next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,6 +60,7 @@ public class ConfirmPasswordFragment extends Fragment {
         return v;
     }
 
+    // sends the user-client back to the UsernameAndPasswordFragment from this fragment
     private void replaceWithEnterUsernameAndPasswordFragmentAndAddToBackstack() {
         getActivity()
                 .getSupportFragmentManager()
@@ -59,6 +71,7 @@ public class ConfirmPasswordFragment extends Fragment {
                 .commit();
     }
 
+    // check that the two password entries are the the same array of characters
     private boolean checkPasswordMatch(String reEnteredPassword){
         if (MainActivity.getUser().getPassword() == reEnteredPassword){
             return true;
@@ -68,6 +81,7 @@ public class ConfirmPasswordFragment extends Fragment {
         }
     }
 
+    // sends the user to the RecoveryFragment from this fragment
     private void replaceWithRecoveryFragmentAndAddToBackstack(){
         getActivity()
                 .getSupportFragmentManager()
@@ -79,6 +93,7 @@ public class ConfirmPasswordFragment extends Fragment {
 
     }
 
+    // if the two passwords mismatch, a toast is displayed saying "Password Mismatch"
     private void DisplayPasswordMismatchToast(){
         Toast.makeText(
                 getActivity().getApplicationContext(),
