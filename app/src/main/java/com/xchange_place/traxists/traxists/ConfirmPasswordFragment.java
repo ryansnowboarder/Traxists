@@ -65,7 +65,7 @@ public class ConfirmPasswordFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_confirm_password,
+                .replace(R.id.main_fragment,
                         new EnterUsernameAndPasswordFragment())
                 .addToBackStack(null)
                 .commit();
@@ -86,7 +86,7 @@ public class ConfirmPasswordFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_confirm_password,
+                .replace(R.id.main_fragment,
                         new RecoveryFragment())
                 .addToBackStack(null)
                 .commit();

@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment {
             getActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_login,
+                    .replace(R.id.main_fragment,
                             new AddOrDeleteAdminFragment())
                     .addToBackStack(null)
                     .commit();
@@ -112,7 +112,7 @@ public class LoginFragment extends Fragment {
                 getActivity()
                         .getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_login,
+                        .replace(R.id.main_fragment,
                                 new ApiLoginsFragment())
                         .addToBackStack(null)
                         .commit();

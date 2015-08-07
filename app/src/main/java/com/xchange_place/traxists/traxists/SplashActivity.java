@@ -40,7 +40,7 @@ public class SplashActivity extends Activity {
 
         // define the RotateAnimation
         RotateAnimation rotate = new RotateAnimation(0, 360,
-                Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF,
+                Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT,
                 1.0f);
 
         // call the RotateAnimation to run

@@ -36,7 +36,7 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_select_acc_type, container, false);
+        View v = inflater.inflate(R.layout.fragment_enter_username_and_password, container, false);
 
         // connect the EditText XML components to the variables in this Java logic
         username_edittext = (EditText) v.findViewById(R.id.username_edittext);
@@ -78,7 +78,7 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_enter_username_and_password,
+                .replace(R.id.main_fragment,
                         new SelectAccountTypeFragment())
                 .addToBackStack(null)
                 .commit();
@@ -176,7 +176,7 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
             getActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_enter_username_and_password,
+                    .replace(R.id.main_fragment,
                             new ConfirmPasswordFragment())
                     .addToBackStack(null)
                     .commit();

@@ -35,9 +35,6 @@
     <!-- fragment_login strings -->
     <string name="enter">Enter</string>
 
-    <!-- fragment_google_billing strings -->
-    <string name="payment">Payment</string>
-
     <!-- fragment_recovery_question strings -->
     <string name="recovery">Recovery</string>
     <string name="question_1">What is your full name?</string>
@@ -54,6 +51,9 @@
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">493414397483013</string>
+
+    <!-- Google APIs Key -->
+    <string name="google_api_key">AIzaSyASx_KobkiHmFZ674I8dtzyPTNAyKcP4aM</string>
 
 
 

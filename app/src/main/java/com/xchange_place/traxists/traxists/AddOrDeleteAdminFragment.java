@@ -110,7 +110,7 @@ public class AddOrDeleteAdminFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_add_or_delete_admins,
+                .replace(R.id.main_fragment,
                         new SelectAccountTypeFragment())
                 .addToBackStack(null)
                 .commit();

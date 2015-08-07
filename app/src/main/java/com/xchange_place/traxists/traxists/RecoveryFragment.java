@@ -70,7 +70,7 @@ public class RecoveryFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_recovery_questions,
+                .replace(R.id.main_fragment,
                         new ConfirmPasswordFragment())
                 .addToBackStack(null)
                 .commit();

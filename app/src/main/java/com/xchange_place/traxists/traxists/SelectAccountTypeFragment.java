@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 /**
@@ -35,34 +36,53 @@ public class SelectAccountTypeFragment extends Fragment {
         user_login_button = (Button) v.findViewById(R.id.go_to_login_button);
         user_create_account_button = (Button) v.findViewById(R.id.go_to_create_account_button);
 
-        // set the default selection to login or create a creator account
-        creator_account_selected_radio_button.setChecked(true);
-        MainActivity.getUser().setAccType((short) 0);
-
         // if creator_account_selected_radio_button is checked, set account type to creator
-        creator_account_selected_radio_button.setOnClickListener(new View.OnClickListener() {
+        creator_account_selected_radio_button.setOnCheckedChangeListener(new RadioButton.OnCheckedChangeListener() {
+
             @Override
-            public void onClick(View v) {
-                if (MainActivity.getUser().getAccType() != (short) 0)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
                     MainActivity.getUser().setAccType((short) 0);
+                    // enable the create account button and login button once
+                    // the user has selected one of the RadioButton options
+                    // the user cannot deselect all of the RadioButtons
+                    // once one has been selected
+                    user_create_account_button.setEnabled(true);
+                    user_login_button.setEnabled(true);
+                }
             }
         });
 
         // if admin_account_selected_radio_button is checked, set account type to admin
-        admin_account_selected_radio_button.setOnClickListener(new View.OnClickListener() {
+        admin_account_selected_radio_button.setOnCheckedChangeListener(new RadioButton.OnCheckedChangeListener(){
+
             @Override
-            public void onClick(View v) {
-                if (MainActivity.getUser().getAccType() != (short) 1)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
                     MainActivity.getUser().setAccType((short) 1);
+                    // enable the create account button and login button once
+                    // the user has selected one of the RadioButton options
+                    // the user cannot deselect all of the RadioButtons
+                    // once one has been selected
+                    user_create_account_button.setEnabled(true);
+                    user_login_button.setEnabled(true);
+                }
             }
         });
 
-        // if user_account_selected_radio_button is checked, set account type to user
-        user_account_selected_radio_button.setOnClickListener(new View.OnClickListener() {
+        user_account_selected_radio_button.setOnCheckedChangeListener(new RadioButton.OnCheckedChangeListener() {
+
             @Override
-            public void onClick(View v) {
-                if (MainActivity.getUser().getAccType() != (short) 2)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
                     MainActivity.getUser().setAccType((short) 2);
+                    // enable the create account button and login button once
+                    // the user has selected one of the RadioButton options
+                    // the user cannot deselect all of the RadioButtons
+                    // once one has been selected
+                    user_create_account_button.setEnabled(true);
+                    user_login_button.setEnabled(true);
+                }
             }
         });
 
@@ -81,6 +101,7 @@ public class SelectAccountTypeFragment extends Fragment {
                 ReplaceWithEnterUsernameAndPasswordFragmentAndAddToBackstack();
             }
         });
+
         return v;
     }
 
@@ -88,7 +109,7 @@ public class SelectAccountTypeFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_select_acc_type,
+                .replace(R.id.main_fragment,
                         new LoginFragment())
                 .addToBackStack(null)
                 .commit();
@@ -98,7 +119,7 @@ public class SelectAccountTypeFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_select_acc_type,
+                .replace(R.id.main_fragment,
                         new EnterUsernameAndPasswordFragment())
                 .addToBackStack(null)
                 .commit();

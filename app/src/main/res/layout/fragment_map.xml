@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/map_fragment_frame"
+    android:visibility="invisible"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentBottom="true">
+
+<fragment
+    android:id="@+id/map_fragment"
+    tools:context=".MapsActivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/marginSize_medium"
+    android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+</FrameLayout>
