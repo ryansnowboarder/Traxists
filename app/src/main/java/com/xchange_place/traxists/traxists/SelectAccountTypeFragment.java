@@ -10,6 +10,10 @@ import android.widget.RadioButton;
 
 /**
  * Created by Ryan Fletcher on 8/3/2015.
+ *
+ * This is the first screen (disregarding the splash screen) that any user-client sees when
+ * launching the application. The user selects an account type and can either login or create
+ * a new account
  */
 public class SelectAccountTypeFragment extends Fragment {
 

@@ -29,25 +29,6 @@ public class User {
     // 1 -> yes
     private boolean loggedIn = false;
 
-    // stores whether or not the client has logged in before
-    // 0 -> no
-    // 1 -> yes
-    private boolean prevLogin = false;
-
-    // stores the state/position of the position of the client in the GUI frames
-    // 0 -> select account type
-    // 1 -> entering username & password
-    // 2 -> confirming password
-    // 3 -> entering recovery answers
-    // 4 -> entering payment information
-    // 5 -> [for User accounts (explained below) only] logging into relevant APIs
-    // 6 -> [for Admin accounts (explained below) only] viewing Google Maps API
-    // 7 -> [for Admin accounts (explained below) only] viewing User account's communications
-    // 8 -> [for Admin accounts (explained below) only] setting keywords and logging out
-    // 9 -> [for Creator accounts (explained below) only] adding/deleting Admin accounts and
-    //      logging out
-    private short loginState = 0;
-
     // stores the type of account that is logged into the system
     // 0 -> Creator account: creates Admin accounts and other Creator accounts
     // 1 -> Admin account: monitors and creates User accounts
@@ -106,22 +87,6 @@ public class User {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
-    }
-
-    public boolean isPrevLogin() {
-        return prevLogin;
-    }
-
-    public void setPrevLogin(boolean prevLogin) {
-        this.prevLogin = prevLogin;
-    }
-
-    public short getLoginState() {
-        return loginState;
-    }
-
-    public void setLoginState(short loginState) {
-        this.loginState = loginState;
     }
 
     public short getAccType() {
