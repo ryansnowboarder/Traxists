@@ -23,6 +23,8 @@ import com.parse.ParseObject;
 public class MainActivity extends ActionBarActivity implements OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener{
 
+    private static final String TAG = "MainActivity";
+
     // allows storage of menu for later use in app flow
     public static Menu menu;
 
@@ -224,7 +226,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     protected void onSaveInstanceState(Bundle outState) {
 
         // save the login information of the user
-        outState.putShort("account_type", user.getAccType());
+        outState.putInt("account_type", user.getAccType());
         outState.putString("username", user.getUsername());
         outState.putString("password", user.getPassword());
         outState.putString("recovery1", user.getRecovery1());
@@ -238,7 +240,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     protected void onRestoreInstanceState(Bundle inState){
 
         // restore the login information of the user
-        user.setAccType(inState.getShort("account_type"));
+        user.setAccType(inState.getInt("account_type"));
         user.setUsername(inState.getString("username"));
         user.setPassword(inState.getString("password"));
         user.setRecovery1(inState.getString("recovery1"));
@@ -254,7 +256,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     public static void postUserToParse(){
         if (user.getAccType() == 0){
             // post creator account to Parse
-            ParseObject creator = new ParseObject("creator");
+            ParseObject creator = new ParseObject("Creators");
             creator.put("username", user.getUsername());
             creator.put("password", user.getPassword());
             creator.put("recovery1", user.getRecovery1());
@@ -264,7 +266,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
         if (user.getAccType() == 1){
             // post admin account to Parse
-            ParseObject admin = new ParseObject("admin");
+            ParseObject admin = new ParseObject("Admins");
             admin.put("username", user.getUsername());
             admin.put("password", user.getPassword());
             admin.put("recovery1", user.getRecovery1());
@@ -274,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
         if (user.getAccType() == 2){
             // post user account to Parse
-            ParseObject userClient = new ParseObject("user");
+            ParseObject userClient = new ParseObject("Users");
             userClient.put("username", user.getUsername());
             userClient.put("password", user.getPassword());
             userClient.put("recovery1", user.getRecovery1());

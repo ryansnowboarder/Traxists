@@ -20,6 +20,8 @@ import com.facebook.login.widget.LoginButton;
  */
 public class ApiLoginsFragment extends Fragment {
 
+    private static final String TAG = "ApiLoginsFragment";
+
     private static CallbackManager callbackManager;
     private LoginButton loginButton;
 

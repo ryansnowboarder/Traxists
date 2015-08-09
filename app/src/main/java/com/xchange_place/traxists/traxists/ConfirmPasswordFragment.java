@@ -18,6 +18,8 @@ import android.widget.Toast;
  */
 public class ConfirmPasswordFragment extends Fragment {
 
+    private static final String TAG = "ConfirmPasswordFragment";
+
     // GUI objects found in fragment_confirm_password
     private EditText confirm_password_edittext;
     private Button confirm_password_prev_button;
@@ -73,7 +75,7 @@ public class ConfirmPasswordFragment extends Fragment {
 
     // check that the two password entries are the the same array of characters
     private boolean checkPasswordMatch(String reEnteredPassword){
-        if (MainActivity.getUser().getPassword() == reEnteredPassword){
+        if (MainActivity.getUser().getPassword().equals(reEnteredPassword)){
             return true;
         }
         else {

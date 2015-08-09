@@ -18,6 +18,8 @@ import android.widget.RadioButton;
  */
 public class SelectAccountTypeFragment extends Fragment {
 
+    private static final String TAG = "SelectAccTypeFragment";
+
     // get GUI objects found in fragment_select_acc_type
     private RadioButton creator_account_selected_radio_button;
     private RadioButton admin_account_selected_radio_button;
@@ -42,7 +44,7 @@ public class SelectAccountTypeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    MainActivity.getUser().setAccType((short) 0);
+                    MainActivity.getUser().setAccType(0);
                     // enable the create account button and login button once
                     // the user has selected one of the RadioButton options
                     // the user cannot deselect all of the RadioButtons
@@ -59,7 +61,7 @@ public class SelectAccountTypeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    MainActivity.getUser().setAccType((short) 1);
+                    MainActivity.getUser().setAccType(1);
                     // enable the create account button and login button once
                     // the user has selected one of the RadioButton options
                     // the user cannot deselect all of the RadioButtons
@@ -75,7 +77,7 @@ public class SelectAccountTypeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    MainActivity.getUser().setAccType((short) 2);
+                    MainActivity.getUser().setAccType(2);
                     // enable the create account button and login button once
                     // the user has selected one of the RadioButton options
                     // the user cannot deselect all of the RadioButtons

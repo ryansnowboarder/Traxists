@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class LoginFragment extends Fragment {
 
+    private static final String TAG = "LoginFragment";
+
     // get GUI objects found in fragment_login
     private EditText login_username_edittext;
     private EditText login_password_edittext;
@@ -52,13 +54,13 @@ public class LoginFragment extends Fragment {
         ParseQuery<ParseObject> query;
         // query the table associated with the account type of the user-client
         if (MainActivity.getUser().getAccType() == 0) {
-            query = ParseQuery.getQuery("creator");
+            query = ParseQuery.getQuery("Creators");
         }
         if (MainActivity.getUser().getAccType() == 1){
-            query = ParseQuery.getQuery("admin");
+            query = ParseQuery.getQuery("Admins");
         }
         else {
-            query = ParseQuery.getQuery("user");
+            query = ParseQuery.getQuery("Users");
         }
         // enter the username and password into the query
         query.whereEqualTo("username", login_username_edittext.getText().toString());
@@ -70,7 +72,11 @@ public class LoginFragment extends Fragment {
                     // if not errors have occurred, the user is now logged in through the
                     // MainActivity and user is brought to the next screen
                     MainActivity.getUser().setLoggedIn(true);
-                    MainActivity.postUserToParse();
+                    MainActivity.getUser().setUsername(list.get(0).getString("username"));
+                    MainActivity.getUser().setPassword((list.get(0).getString("password")));
+                    MainActivity.getUser().setRecovery1((list.get(0).getString("recovery1")));
+                    MainActivity.getUser().setRecovery2((list.get(0).getString("recovery2")));
+                    MainActivity.getUser().setRecovery3((list.get(0)).getString("recovery3"));
                     BringCustomerToNextScreen();
                 } else {
                     // if there is an error, warn the user of a username/password mismatch

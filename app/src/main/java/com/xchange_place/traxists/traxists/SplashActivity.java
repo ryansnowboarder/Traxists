@@ -17,6 +17,7 @@ import android.widget.ImageView;
  */
 public class SplashActivity extends Activity {
 
+    private static final String TAG = "SplashActivity";
     private ImageView splashLogo;
     private final int SPLASH_DISPLAY_LENGTH = 1500;
 

@@ -20,6 +20,8 @@ import android.widget.EditText;
  */
 public class RecoveryFragment extends Fragment {
 
+    private static final String TAG = "RecoveryFragment";
+
     // GUI objects found in fragment_recovery_questions
     private EditText recovery_question_1_edittext;
     private EditText recovery_question_2_edittext;
@@ -30,7 +32,7 @@ public class RecoveryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_confirm_password, container, false);
+        View v = inflater.inflate(R.layout.fragment_recovery_questions, container, false);
 
         // connect the EditText XML components to the variables in this Java logic
         recovery_question_1_edittext = (EditText) v.findViewById(R.id.recovery_question_1);

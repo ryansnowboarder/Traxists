@@ -33,7 +33,7 @@ public class User {
     // 0 -> Creator account: creates Admin accounts and other Creator accounts
     // 1 -> Admin account: monitors and creates User accounts
     // 2 -> User account: processes data and sends to Admin accounts
-    private short accType;
+    private int accType;
 
     /*
     *
@@ -89,11 +89,11 @@ public class User {
         this.loggedIn = loggedIn;
     }
 
-    public short getAccType() {
+    public int getAccType() {
         return accType;
     }
 
-    public void setAccType(short accType) {
+    public void setAccType(int accType) {
         this.accType = accType;
     }
 }

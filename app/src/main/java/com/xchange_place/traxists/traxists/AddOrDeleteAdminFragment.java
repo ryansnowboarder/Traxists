@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -23,6 +24,8 @@ import java.util.List;
  * a user account appears to have exited any defined zone that he or she should not exit from.
  */
 public class AddOrDeleteAdminFragment extends Fragment {
+
+    private static final String TAG = "AddDeleteAdminFrag";
 
     // GUI objects found in fragment_add_or_delete_admin screen
     private EditText add_or_delete_admin_username_edittext;
@@ -79,6 +82,7 @@ public class AddOrDeleteAdminFragment extends Fragment {
         ParseObject admins = new ParseObject(MainActivity.getUser().getUsername() + "_admins");
         admins.put("username", add_or_delete_admin_username_edittext.getText().toString());
         admins.saveInBackground();
+        Toast.makeText(getActivity(), "Admin added.", Toast.LENGTH_SHORT);
     }
 
     private void deleteAdminFromNetwork(){
@@ -93,12 +97,13 @@ public class AddOrDeleteAdminFragment extends Fragment {
                 }
             }
         });
+        Toast.makeText(getActivity(), "Admin deleted.", Toast.LENGTH_SHORT);
     }
 
     private void logout(){
         // clear stored user data
         User user = MainActivity.getUser();
-        user.setAccType((short) -1);
+        user.setAccType(-1);
         user.setRecovery3(null);
         user.setRecovery2(null);
         user.setRecovery1(null);
