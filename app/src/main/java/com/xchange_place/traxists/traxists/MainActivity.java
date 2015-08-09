@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -64,6 +65,11 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         // to store login data about the current user-client
         user = new User();
 
+        // initialize the Facebook SDK
+        FacebookSdk.sdkInitialize(this);
+
+        // initialize a SupportMapFragment for use
+        // after an admin account logs in
         mapFragment = new SupportMapFragment();
 
         // asynchronously retrieve Google Map from Google API
@@ -283,32 +289,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             userClient.put("recovery2", user.getRecovery2());
             userClient.put("recovery3", user.getRecovery3());
             userClient.saveInBackground();
-        }
-    }
-
-    private void replaceRecoveryFragmentWithNextFragment(){
-        if (user.getAccType() == 0){
-            // move to AddOrDeleteAdminsFragment
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_recovery_questions,
-                            new AddOrDeleteAdminFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
-        if (user.getAccType() == 1){
-            // create the menu and make the fragment containing the Google Maps
-            // API screen visible
-            onCreateOptionMenu(menu);
-        }
-        if (user.getAccType() == 2){
-            // move to ApiLoginsFragment
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_recovery_questions,
-                            new ApiLoginsFragment())
-                    .addToBackStack(null)
-                    .commit();
         }
     }
 

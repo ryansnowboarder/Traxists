@@ -60,7 +60,7 @@ public class RecoveryFragment extends Fragment {
         recovery_questions_next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceWithGoogleMapsApiFragmentAndAddToBackstackAndStoreRecoveryAnswers();
+                replaceWithNextFragmentAndAddToBackstackAndStoreRecoveryAnswers();
             }
         });
         return v;
@@ -80,12 +80,48 @@ public class RecoveryFragment extends Fragment {
 
     // calls the MainActivity.postUserToParse() function and stores the answers to
     // the recovery questions in the User object of MainActivity
-    private void replaceWithGoogleMapsApiFragmentAndAddToBackstackAndStoreRecoveryAnswers(){
+    private void replaceWithNextFragmentAndAddToBackstackAndStoreRecoveryAnswers(){
         MainActivity.getUser().setRecovery1(recovery_question_1_edittext.getText().toString());
         MainActivity.getUser().setRecovery2(recovery_question_2_edittext.getText().toString());
         MainActivity.getUser().setRecovery3(recovery_question_3_edittext.getText().toString());
 
         MainActivity.postUserToParse();
+        BringCustomerToNextScreen();
+    }
+
+    // brings the customer to the next screen, depending on their account type
+    private void BringCustomerToNextScreen(){
+        // bring creator accounts to AddOrDeleteAdminFragment where they
+        // can manage their list of admins and logout
+        if (MainActivity.getUser().getAccType() == 0){
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment,
+                            new AddOrDeleteAdminFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
+        // bring admin accounts to the Google Maps API where they can view
+        // the locations of their related user accounts
+        if (MainActivity.getUser().getAccType() == 1){
+            MainActivity.onCreateOptionMenu(MainActivity.menu);
+        }
+        // Bring user accounts to the ApiLoginsFragment where they
+        // log into the Facebook API. Permission to use the Google
+        // Geolocation API is granted or denied upon the launch of
+        // MainActivity.
+        else {
+            if (MainActivity.getUser().getAccType() == 2){
+                getActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment,
+                                new ApiLoginsFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        }
     }
 
 }
