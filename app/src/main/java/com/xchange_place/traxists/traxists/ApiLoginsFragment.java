@@ -40,13 +40,9 @@ public class ApiLoginsFragment extends Fragment {
         // find the Facebook LoginButton object in the XML and connect it to the Java logic
         loginButton = (LoginButton) v.findViewById(R.id.facebook_login_button);
 
-        // set the initial permissions a user is prompted for when clicking the loginButton object
-        loginButton.setReadPermissions("current_location");
-
         // the loginButton object is required to be connected to the fragment if it is not
         // in an activity
         loginButton.setFragment(this);
-        // Other app specific specialization
 
         // register a callback to the loginButton that...
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -67,10 +63,5 @@ public class ApiLoginsFragment extends Fragment {
         });
 
         return v;
-    }
-
-    // a getter for the callbackManager object
-    public static CallbackManager getCallbackManager() {
-        return callbackManager;
     }
 }
