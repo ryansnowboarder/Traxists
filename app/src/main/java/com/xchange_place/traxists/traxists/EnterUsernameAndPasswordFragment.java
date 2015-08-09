@@ -45,6 +45,11 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
         login_setup_prev_button = (Button) v.findViewById(R.id.login_setup_prev_button);
         login_setup_next_button = (Button) v.findViewById(R.id.login_setup_next_button);
 
+        // in case the user-client has hit the prev button and returned
+        // to this fragment, restore the previous inputs of the user-client
+        username_edittext.setText(MainActivity.getUser().getUsername());
+        password_edittext.setText(MainActivity.getUser().getPassword());
+
         // when login_setup_prev_button is clicked, the client-user is brought back
         // to the SelectAccountTypeFragment
         login_setup_prev_button.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +77,13 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putString("username", username_edittext.getText().toString());
+        outState.putString("password", password_edittext.getText().toString());
+    }
+
     // replaces the EnterUsernameAndPasswordFragment with SelectAccountTypeFragment
     private void ReplaceWithSelectAccountTypeFragmentAndAddToBackstack(){
         getActivity()
@@ -88,9 +100,6 @@ public class EnterUsernameAndPasswordFragment extends Fragment {
 
         // while Parse is being queried, a ProgressDialog is displayed
         private ProgressDialog pd;
-
-        // a flag to store whether or not the desired username is currently available
-        public boolean isUsernameAvailable;
 
         @Override
         protected void onPreExecute() {
