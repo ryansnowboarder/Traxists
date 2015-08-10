@@ -106,6 +106,13 @@ public class RecoveryFragment extends Fragment {
         // the locations of their related user accounts
         if (MainActivity.getUser().getAccType() == 1){
             MainActivity.onCreateOptionMenu(MainActivity.menu);
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment,
+                            MainActivity.mapFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
         // Bring user accounts to the ApiLoginsFragment where they
         // log into the Facebook API. Permission to use the Google

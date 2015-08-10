@@ -4,8 +4,7 @@
     android:id="@+id/fragment_recovery_questions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@color/background_blue">
 
@@ -13,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginSize_extraSmall"
+        android:layout_marginTop="@dimen/marginSize_medium"
         android:text="@string/recovery"
         android:textStyle="bold"
         android:textSize="25dp" />
