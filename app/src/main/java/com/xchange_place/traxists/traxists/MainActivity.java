@@ -2,6 +2,7 @@ package com.xchange_place.traxists.traxists;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,8 +18,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
+
+import java.util.List;
+import java.util.Vector;
 
 
 public class MainActivity extends ActionBarActivity implements OnMapReadyCallback,
@@ -47,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     // a flag indicating that a PendingIntent is in progress  to Googlw APIs and prevents
     // the starting of further intents
     private boolean mIntentInProgress;
+
+    private static Vector<UserLocation> userLocationVector;
 
 
 
@@ -86,6 +98,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         Parse.enableLocalDatastore(this);
         // connect to Parse MBAAS service
         Parse.initialize(this, "ohQwVLtLq2NLrJXZ2UlrGt11mL394tclcfC69q8t", "gPQYbQhd3EkFtKOeSg1B9Now2WJJIj4cpNYCVJrJ");
+        // save the current installation to Parse.
+        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -160,7 +174,16 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnected(Bundle bundle) {
-        // do application logic here
+        // when the map begins any connection to the internet,
+        // begin querying the location data of the users
+        // associated with an admin account if and
+        // only if an admin account is currently logged in
+        if (user != null)
+        if (user.isLoggedIn())
+            if (user.getAccType() == 1) {
+                queryUserLocationDataAndAddToMap.execute();
+                sendPushesToCreators.execute();
+            }
     }
 
     @Override
@@ -268,6 +291,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             creator.put("recovery2", user.getRecovery2());
             creator.put("recovery3", user.getRecovery3());
             creator.saveInBackground();
+
+            // subscribe to PUSH notifications
+            ParsePush.subscribeInBackground(user.getUsername());
         }
         if (user.getAccType() == 1){
             // post admin account to Parse
@@ -291,6 +317,96 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
     }
 
+    private AsyncTask<Void, Void, Void> queryUserLocationDataAndAddToMap = new AsyncTask<Void, Void, Void>() {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // infinitely loop until application is killed
+            while (true) {
+                // setup the Parse query
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(
+                        getUser().getUsername() + "_users"
+                );
+                List<ParseObject> users;
+                try {
+                    users = query.find();
+                    // iterate through all the found users
+                    for (int i = 0; i < users.size(); i++) {
+                        // process each user
+                        ParseObject user = users.get(i);
+
+                        // save the user account location data in a Vector using UserLocation objects
+                        UserLocation usersLocation = new UserLocation();
+                        usersLocation.setUsername(user.getString("username"));
+                        usersLocation.setLatitude(user.getString("latitude"));
+                        usersLocation.setLongitude(user.getString("longitude"));
+                        userLocationVector.add(usersLocation);
+
+                        // put the user account location data into LatLng objects for use in
+                        // mapFragment
+                        LatLng userLocation = new LatLng(
+                                Double.valueOf(user.getString("latitude")),
+                                Double.valueOf(user.getString("longitude"))
+                        );
+
+                        // add the user account location data as a marker onto the mapFragment
+                        mapFragment.getMap()
+                                .addMarker(
+                                        new MarkerOptions()
+                                                .position(userLocation)
+                                                .title(user.getString("username")));
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    wait(1000 * 60 * 5);
+                } catch (InterruptedException e) {
+                }
+
+
+                return null;
+            }
+        }
+    };
+
+    private AsyncTask<Void, Void, Void> sendPushesToCreators = new AsyncTask<Void, Void, Void>() {
+        @Override
+        protected Void doInBackground(Void... params) {
+            // infinitely loop until application is exited
+            while (true) {
+                // setup the Parse query
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(getUser().getUsername() + "_creators");
+                try {
+                    List<ParseObject> associatedCreators = query.find();
+                    // iterate through associated creator accounts
+                    for (int i = 0; i < associatedCreators.size(); i++) {
+                        // iterate through user locations
+                        for (int j = 0; j < userLocationVector.size(); j++) {
+                            // send PUSH notifications with user locations
+                            ParsePush push = new ParsePush();
+                            push.setChannel(associatedCreators.get(i).getString("username"));
+                            push.setMessage("Username: " + userLocationVector.get(j).getUsername()
+                                    + " at " + userLocationVector.get(j).getLatitude() + " lat " +
+                                    userLocationVector.get(j).getLongitude() + " long.");
+                            push.sendInBackground();
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // wait 5 minutes between iterations
+                try {
+                    wait(1000 * 60 * 5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
+    };
+
     /*
     *
     * GETTERS AND SETTERS
@@ -307,5 +423,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public static GoogleApiClient getmGoogleApiClient() {
         return mGoogleApiClient;
+    }
+
+    public static Vector<UserLocation> getUserLocationVector() {
+        return userLocationVector;
     }
 }

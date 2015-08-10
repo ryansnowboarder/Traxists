@@ -1,5 +1,6 @@
 package com.xchange_place.traxists.traxists;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 import java.util.List;
@@ -65,6 +69,9 @@ public class LoginFragment extends Fragment {
         // query the table associated with the account type of the user-client
         if (MainActivity.getUser().getAccType() == 0) {
             query = ParseQuery.getQuery("Creators");
+
+            // subscribe to PUSH notifications
+            ParsePush.subscribeInBackground(MainActivity.getUser().getUsername());
         }
         if (MainActivity.getUser().getAccType() == 1){
             query = ParseQuery.getQuery("Admins");
@@ -87,6 +94,9 @@ public class LoginFragment extends Fragment {
                     MainActivity.getUser().setRecovery1((list.get(0).getString("recovery1")));
                     MainActivity.getUser().setRecovery2((list.get(0).getString("recovery2")));
                     MainActivity.getUser().setRecovery3((list.get(0)).getString("recovery3"));
+                    if (MainActivity.getUser().getAccType() == 1){
+
+                    }
                     BringCustomerToNextScreen();
                 } else {
                     // if there is an error, warn the user of a username/password mismatch
@@ -146,5 +156,95 @@ public class LoginFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
+    private AsyncTask<Void, Void, Void> queryUserLocationDataAndAddToMap = new AsyncTask<Void, Void, Void>() {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // infinitely loop until application is killed
+            while (true) {
+                // setup the Parse query
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(
+                        MainActivity.getUser().getUsername() + "_users"
+                );
+                List<ParseObject> users;
+                try {
+                    users = query.find();
+                    // iterate through all the found users
+                    for (int i = 0; i < users.size(); i++) {
+                        // process each user
+                        ParseObject user = users.get(i);
+
+                        // save the user account location data in a Vector using UserLocation objects
+                        UserLocation usersLocation = new UserLocation();
+                        usersLocation.setUsername(user.getString("username"));
+                        usersLocation.setLatitude(user.getString("latitude"));
+                        usersLocation.setLongitude(user.getString("longitude"));
+                        MainActivity.getUserLocationVector().add(usersLocation);
+
+                        // put the user account location data into LatLng objects for use in
+                        // mapFragment
+                        LatLng userLocation = new LatLng(
+                                Double.valueOf(user.getString("latitude")),
+                                Double.valueOf(user.getString("longitude"))
+                        );
+
+                        // add the user account location data as a marker onto the mapFragment
+                        MainActivity.mapFragment.getMap()
+                                .addMarker(
+                                        new MarkerOptions()
+                                                .position(userLocation)
+                                                .title(user.getString("username")));
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    wait(1000 * 60 * 5);
+                } catch (InterruptedException e) {
+                }
+
+
+                return null;
+            }
+        }
+    };
+
+    private AsyncTask<Void, Void, Void> sendPushesToCreators = new AsyncTask<Void, Void, Void>() {
+        @Override
+        protected Void doInBackground(Void... params) {
+            // infinitely loop until application is exited
+            while (true) {
+                // setup the Parse query
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(MainActivity.getUser().getUsername() + "_creators");
+                try {
+                    List<ParseObject> associatedCreators = query.find();
+                    // iterate through associated creator accounts
+                    for (int i = 0; i < associatedCreators.size(); i++) {
+                        // iterate through user locations
+                        for (int j = 0; j < MainActivity.getUserLocationVector().size(); j++) {
+                            // send PUSH notifications with user locations
+                            ParsePush push = new ParsePush();
+                            push.setChannel(associatedCreators.get(i).getString("username"));
+                            push.setMessage("Username: " + MainActivity.getUserLocationVector().get(j).getUsername()
+                                    + " at " + MainActivity.getUserLocationVector().get(j).getLatitude() + " lat " +
+                                    MainActivity.getUserLocationVector().get(j).getLongitude() + " long.");
+                            push.sendInBackground();
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // wait 5 minutes between iterations
+                try {
+                    wait(1000 * 60 * 5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
+    };
 }
 

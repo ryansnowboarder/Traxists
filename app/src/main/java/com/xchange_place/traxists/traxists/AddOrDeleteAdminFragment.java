@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 import java.util.List;
@@ -79,14 +80,18 @@ public class AddOrDeleteAdminFragment extends Fragment {
     }
 
     private void addAdminToNetwork(){
-        ParseObject admins = new ParseObject(MainActivity.getUser().getUsername() + "_admins");
-        admins.put("username", add_or_delete_admin_username_edittext.getText().toString());
-        admins.saveInBackground();
+        ParseObject creator_admins = new ParseObject(add_or_delete_admin_username_edittext
+                .getText()
+                .toString()
+                + "_creators");
+        creator_admins.put("username", MainActivity.getUser().getUsername());
+        creator_admins.saveInBackground();
+
         Toast.makeText(getActivity(), "Admin added.", Toast.LENGTH_SHORT);
     }
 
     private void deleteAdminFromNetwork(){
-        String adminsTableName = MainActivity.getUser().getUsername() + "_admins";
+        String adminsTableName = add_or_delete_admin_username_edittext.getText().toString() + "_creators";
         ParseQuery<ParseObject> query = ParseQuery.getQuery(adminsTableName);
         query.whereEqualTo("username", add_or_delete_admin_username_edittext.getText().toString());
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -101,8 +106,12 @@ public class AddOrDeleteAdminFragment extends Fragment {
     }
 
     private void logout(){
-        // clear stored user data
         User user = MainActivity.getUser();
+
+        // unsubscribe from PUSH notifications
+        ParsePush.unsubscribeInBackground(user.getUsername());
+
+        // clear stored user data
         user.setAccType(-1);
         user.setRecovery3(null);
         user.setRecovery2(null);
