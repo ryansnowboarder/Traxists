@@ -36,13 +36,13 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private static MainActivity mainActivity;
 
     // store a copy of SupportMapFragment (Google Maps API) for use in application
-    private static SupportMapFragment mapFragment;
+    public static SupportMapFragment mapFragment;
 
     // a request code used in invoking user interactions with Google APIs
     private static final int RC_SIGN_IN = 0;
 
     // client used to interact with Google APIs
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
 
     // a flag indicating that a PendingIntent is in progress  to Googlw APIs and prevents
     // the starting of further intents
@@ -187,8 +187,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     @Override
     protected void onPause() {
         super.onPause();
-
-        // tracks 'app deactivate' app event on Facebook API
+        // this tracks 'app deactivate' app event on the Facebook API
         AppEventsLogger.deactivateApp(this);
     }
 
@@ -257,8 +256,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         super.onRestoreInstanceState(inState);
     }
 
-    // once the client has inputed all account information and purchased the service
-    // through the Braintree API, save the account information in Parse
+    // once the client has inputted all account information,
+    // save the account information in Parse
     public static void postUserToParse(){
         if (user.getAccType() == 0){
             // post creator account to Parse
@@ -304,5 +303,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public static void setUser(User user) {
         MainActivity.user = user;
+    }
+
+    public static GoogleApiClient getmGoogleApiClient() {
+        return mGoogleApiClient;
     }
 }
