@@ -29,6 +29,7 @@ public class LoginFragment extends Fragment {
     private EditText login_username_edittext;
     private EditText login_password_edittext;
     private Button login_button;
+    private Button forgot_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,12 +39,21 @@ public class LoginFragment extends Fragment {
         login_username_edittext = (EditText) v.findViewById(R.id.login_username_edittext);
         login_password_edittext = (EditText) v.findViewById(R.id.login_password_edittext);
         login_button = (Button) v.findViewById(R.id.login_button);
+        forgot_button = (Button) v.findViewById(R.id.forgot_button);
 
         // when the login_button is pressed, execute the login function
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
+            }
+        });
+
+        // when the forgot_button is pressed, execute the forgot function
+        forgot_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgot();
             }
         });
         return v;
@@ -124,6 +134,17 @@ public class LoginFragment extends Fragment {
                         .commit();
             }
         }
+    }
+
+    // bring the user-client to the ForgotPasswordFragment
+    private void forgot(){
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fragment,
+                        new ForgotPasswordFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
 
